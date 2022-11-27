@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "target": "ES2015",
+      "module": "commonjs",
+      "lib": [ "es5", "es6", "dom" ],
+      "allowJs": true,
+      "skipLibCheck": true,
+      "outDir": "dist",
+      "rootDir": "./src",
+      "esModuleInterop": true,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "sourceMap":  false
+    }
+  }
