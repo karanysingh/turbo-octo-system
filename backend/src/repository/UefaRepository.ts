@@ -172,8 +172,6 @@ export class UefaRepository {
     clubName: string,
     type: string
   ): Promise<PlayerStats[]> {
-    const sequelize = DbConnector.getClient();
-
     const player_res = await Players_Info.findAll({
       attributes: ["player_id", "first_name", "last_name", "club"],
       where: { club: clubName },

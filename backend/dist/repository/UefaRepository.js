@@ -155,7 +155,6 @@ class UefaRepository {
     }
     getPlayerStatsByType(clubName, type) {
         return __awaiter(this, void 0, void 0, function* () {
-            const sequelize = db_1.DbConnector.getClient();
             const player_res = yield players_info_1.default.findAll({
                 attributes: ["player_id", "first_name", "last_name", "club"],
                 where: { club: clubName },

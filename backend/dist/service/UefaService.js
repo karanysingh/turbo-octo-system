@@ -67,7 +67,6 @@ class UefaService {
     getPlayerStats(clubName, type) {
         return __awaiter(this, void 0, void 0, function* () {
             const playerStats = yield uefaRepository.getPlayerStatsByType(clubName, type);
-            console.log(playerStats);
             return playerStats;
         });
     }

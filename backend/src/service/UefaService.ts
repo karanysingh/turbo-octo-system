@@ -112,7 +112,6 @@ export class UefaService {
       clubName,
       type
     );
-    console.log(playerStats);
     return playerStats;
   }
 }
