@@ -1,23 +1,27 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, Model, ModelStatic, Sequelize } from "sequelize";
 import { DbConnector } from "../config/db";
+import Disciplinary from "./disciplinary";
 
-const PlayersInfo = DbConnector.getClient().define(
-  "PlayersInfo",
+const Players_Info = DbConnector.getClient().define(
+  "Players_Info",
   {
     player_id: {
       type: DataTypes.BIGINT,
     },
-    first_name:{
-        type: DataTypes.STRING,
+    first_name: {
+      type: DataTypes.STRING,
     },
-    last_name:{
-        type: DataTypes.STRING,
+    last_name: {
+      type: DataTypes.STRING,
     },
     club: {
       type: DataTypes.STRING,
     },
   },
-  {}
+  {
+    underscored: true,
+    freezeTableName: true,
+  }
 );
 
-export default PlayersInfo;
+export default Players_Info;

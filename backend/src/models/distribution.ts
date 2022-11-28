@@ -32,7 +32,9 @@ const Distribution = DbConnector.getClient().define(
       type: DataTypes.NUMBER,
     },
   },
-  {}
+  {
+    freezeTableName: true,
+  }
 );
 
 export default Distribution;

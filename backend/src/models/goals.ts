@@ -32,7 +32,9 @@ const Goals = DbConnector.getClient().define(
       type: DataTypes.NUMBER,
     },
   },
-  {}
+  {
+    freezeTableName: true,
+  }
 );
 
 export default Goals;

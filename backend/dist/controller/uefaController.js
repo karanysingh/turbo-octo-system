@@ -25,16 +25,15 @@ router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
         if (club_names) {
             clubNames = club_names.toString().split(",");
         }
-        if (type && clubNames && clubNames.length == 1) {
-            console.log("type and clubNames");
+        if (type && club_names && clubNames.length == 1) {
             const result = yield uefaService.getPlayerStats(clubNames[0], type);
             res.status(200).send(result);
         }
-        else if (clubNames && position) {
+        else if (club_names && position) {
             const result = yield uefaService.getGoalsScoredinPosition(clubNames, position);
             res.status(200).send(result);
         }
-        else if (clubNames) {
+        else if (club_names) {
             const result = yield uefaService.getClubsStats(clubNames);
             res.status(200).send(result);
         }

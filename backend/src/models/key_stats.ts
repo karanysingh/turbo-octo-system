@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 import { DbConnector } from "../config/db";
 
-const KeyStats = DbConnector.getClient().define(
-  "KeyStats",
+const Key_stats = DbConnector.getClient().define(
+  "Key_stats",
   {
     player_id: {
       type: DataTypes.BIGINT,
@@ -29,7 +29,9 @@ const KeyStats = DbConnector.getClient().define(
       type: DataTypes.NUMBER,
     },
   },
-  {}
+  {
+    freezeTableName: true,
+  }
 );
 
-export default KeyStats;
+export default Key_stats;

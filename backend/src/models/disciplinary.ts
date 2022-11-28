@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import { DbConnector } from "../config/db";
+import Players_Info from "./players_info";
 
 const Disciplinary = DbConnector.getClient().define(
   "Disciplinary",
@@ -32,7 +33,10 @@ const Disciplinary = DbConnector.getClient().define(
       type: DataTypes.NUMBER,
     },
   },
-  {}
+  {
+    underscored: true,
+    freezeTableName: true,
+  }
 );
-
+ 
 export default Disciplinary;

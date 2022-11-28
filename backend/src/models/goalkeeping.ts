@@ -1,4 +1,5 @@
 import { DataTypes } from "sequelize";
+import sequelize from "sequelize/types/sequelize";
 import { DbConnector } from "../config/db";
 
 const Goalkeeping = DbConnector.getClient().define(
@@ -32,7 +33,9 @@ const Goalkeeping = DbConnector.getClient().define(
       type: DataTypes.NUMBER,
     },
   },
-  {}
+  {
+    freezeTableName: true,
+  }
 );
 
 export default Goalkeeping;

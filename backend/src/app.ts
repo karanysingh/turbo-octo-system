@@ -4,7 +4,7 @@ envConfig();
 import { Server } from "./server";
 import { DbConnector } from "./config/db";
 
-const server = new Server(8080);
+const server = new Server(8081);
 
 const dbClient = DbConnector.getClient();
 dbClient.authenticate().then(() => {

@@ -34,9 +34,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
       res.status(200).send(result);
 
     } else if (playerNames) {
-      const playerInfo = await uefaService.getPlayerInfo(
-        playerNames as string[]
-      );
+      const playerInfo = await uefaService.getPlayerInfo(playerNames as string);
       return res.status(200).json(playerInfo);
 
     } else {

@@ -29,7 +29,9 @@ const Attempts = DbConnector.getClient().define(
       type: DataTypes.NUMBER,
     },
   },
-  {}
+  {
+    freezeTableName: true,
+  }
 );
 
-export default Defending;
+export default Attempts;
