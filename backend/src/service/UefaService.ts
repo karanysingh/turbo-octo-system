@@ -28,21 +28,23 @@ interface ClubStats {
 
 interface PlayerStats {
   name: string;
-  attack: {
+  type: string;
+  club: string;
+  attack?: {
     goals_scored: number;
     assists: number;
     corners: number;
     offsides: number;
     dribbles: number;
   };
-  defence: {
+  defence?: {
     goals: number;
     tackles_won: number;
     tackles_lost: number;
     clearance_attempts: number;
     balls_recovered: number;
   };
-  goalkeeping: {
+  goalkeeping?: {
     saved: number;
     conceded: number;
     clean_sheets: number;
@@ -96,38 +98,21 @@ export class UefaService {
     clubNames: string[],
     position: string
   ): Promise<number[]> {
-    return [10, 10, 10];
+    let goalsScored = clubNames.map(async (clubName) => {
+      return await uefaRepository.getGoalsScoredInPosition(clubName, position);
+    });
+    return Promise.all(goalsScored);
   }
 
   public async getPlayerStats(
     clubName: string,
-    type: "attack" | "defence" | "goalkeeping"
+    type: string
   ): Promise<PlayerStats[]> {
-    const playerStats = [
-      {
-        name: "Ronaldo",
-        attack: {
-          goals_scored: 10,
-          assists: 10,
-          corners: 10,
-          offsides: 10,
-          dribbles: 10,
-        },
-        defence: {
-          goals: 10,
-          tackles_won: 10,
-          tackles_lost: 10,
-          clearance_attempts: 10,
-          balls_recovered: 10,
-        },
-        goalkeeping: {
-          saved: 10,
-          conceded: 10,
-          clean_sheets: 10,
-          punches: 10,
-        },
-      },
-    ];
+    const playerStats = await uefaRepository.getPlayerStatsByType(
+      clubName,
+      type
+    );
+    console.log(playerStats);
     return playerStats;
   }
 }

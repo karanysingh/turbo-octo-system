@@ -58,36 +58,16 @@ class UefaService {
     }
     getGoalsScoredinPosition(clubNames, position) {
         return __awaiter(this, void 0, void 0, function* () {
-            return [10, 10, 10];
+            let goalsScored = clubNames.map((clubName) => __awaiter(this, void 0, void 0, function* () {
+                return yield uefaRepository.getGoalsScoredInPosition(clubName, position);
+            }));
+            return Promise.all(goalsScored);
         });
     }
     getPlayerStats(clubName, type) {
         return __awaiter(this, void 0, void 0, function* () {
-            const playerStats = [
-                {
-                    name: "Ronaldo",
-                    attack: {
-                        goals_scored: 10,
-                        assists: 10,
-                        corners: 10,
-                        offsides: 10,
-                        dribbles: 10,
-                    },
-                    defence: {
-                        goals: 10,
-                        tackles_won: 10,
-                        tackles_lost: 10,
-                        clearance_attempts: 10,
-                        balls_recovered: 10,
-                    },
-                    goalkeeping: {
-                        saved: 10,
-                        conceded: 10,
-                        clean_sheets: 10,
-                        punches: 10,
-                    },
-                },
-            ];
+            const playerStats = yield uefaRepository.getPlayerStatsByType(clubName, type);
+            console.log(playerStats);
             return playerStats;
         });
     }

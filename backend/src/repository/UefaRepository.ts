@@ -4,6 +4,34 @@ import Goalkeeping from "../models/goalkeeping";
 import Goals from "../models/goals";
 import Key_stats from "../models/key_stats";
 import Players_Info from "../models/players_info";
+import Attacking from "../models/attacking";
+import Defending from "../models/defending";
+
+interface PlayerStats {
+  name: string;
+  type: string;
+  club: string;
+  attack?: {
+    goals_scored: number;
+    assists: number;
+    corners: number;
+    offsides: number;
+    dribbles: number;
+  };
+  defence?: {
+    goals: number;
+    tackles_won: number;
+    tackles_lost: number;
+    clearance_attempts: number;
+    balls_recovered: number;
+  };
+  goalkeeping?: {
+    saved: number;
+    conceded: number;
+    clean_sheets: number;
+    punches: number;
+  };
+}
 
 export class UefaRepository {
   public async getGoalsScored(clubName: string): Promise<number> {
@@ -30,7 +58,6 @@ export class UefaRepository {
       ],
       where: { club: clubName },
     });
-    console.log(goals);
     return goals[0].dataValues.total_goals_conceded;
   }
 
@@ -74,7 +101,6 @@ export class UefaRepository {
       attributes: ["first_name", "last_name"],
       where: { player_id: player_id.dataValues.player_id },
     });
-    console.log(player_name);
     return (
       player_name.dataValues.first_name + " " + player_name.dataValues.last_name
     );
@@ -114,6 +140,20 @@ export class UefaRepository {
     return results[0];
   }
 
+  public async getGoalsScoredInPosition(
+    clubName: string,
+    position: string
+  ): Promise<number> {
+    const goals = await Goals.findOne({
+      attributes: ["goals"],
+      where: {
+        club: clubName,
+        position: position,
+      },
+    });
+    return goals.dataValues.goals;
+  }
+
   public async getClubStats(clubNames: string[]): Promise<any> {
     let resultList = [];
 
@@ -126,5 +166,75 @@ export class UefaRepository {
     }
 
     return resultList;
+  }
+
+  public async getPlayerStatsByType(
+    clubName: string,
+    type: string
+  ): Promise<PlayerStats[]> {
+    const sequelize = DbConnector.getClient();
+
+    const player_res = await Players_Info.findAll({
+      attributes: ["player_id", "first_name", "last_name", "club"],
+      where: { club: clubName },
+    });
+
+    let playerStats = player_res.map(async (player) => {
+      const player_id = player.dataValues.player_id;
+      const player_name =
+        player.dataValues.first_name + " " + player.dataValues.last_name;
+      const club = player.dataValues.club;
+      const attacking = await Attacking.findOne({
+        attributes: ["assists", "corner_taken", "offsides", "dribbles"],
+        where: { player_id: player_id },
+      });
+      const goals = await Goals.findOne({
+        attributes: ["goals"],
+        where: { player_id: player_id },
+      });
+      const defending = await Defending.findOne({
+        attributes: [
+          "balls_recoverd",
+          "t_won",
+          "t_lost",
+          "clearance_attempted",
+          "tackles",
+        ],
+        where: { player_id: player_id },
+      });
+
+      const goalkeeping = await Goalkeeping.findOne({
+        attributes: ["conceded", "saved", "cleansheets", "punches_made"],
+        where: { player_id: player_id },
+      });
+
+      return {
+        name: player_name,
+        type: type,
+        club: club,
+        attack: {
+          goals_scored: 0,
+          assists: attacking?.dataValues.assists || 0,
+          corners: attacking?.dataValues.corner_taken || 0,
+          offsides: attacking?.dataValues.offsides || 0,
+          dribbles: attacking?.dataValues.dribbles || 0,
+        },
+        defence: {
+          goals: goals?.dataValues.goals || 0,
+          tackles_won: defending?.dataValues.t_won || 0,
+          tackles_lost: defending?.dataValues.t_lost || 0,
+          clearance_attempts: defending?.dataValues.clearance_attempted || 0,
+          balls_recovered: defending?.dataValues.balls_recoverd || 0,
+        },
+        goalkeeping: {
+          saved: goalkeeping?.dataValues.saved || 0,
+          conceded: goalkeeping?.dataValues.conceded || 0,
+          clean_sheets: goalkeeping?.dataValues.cleansheets || 0,
+          punches: goalkeeping?.dataValues.punches_made || 0,
+        },
+      };
+    });
+
+    return Promise.all(playerStats);
   }
 }

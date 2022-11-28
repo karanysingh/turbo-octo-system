@@ -18,7 +18,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
     if (type && club_names && clubNames.length == 1) {
       const result = await uefaService.getPlayerStats(
         clubNames[0],
-        type as "attack" | "defence" | "goalkeeping"
+        type.toString()
       );
       res.status(200).send(result);
 

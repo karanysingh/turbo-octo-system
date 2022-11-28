@@ -18,6 +18,8 @@ const goalkeeping_1 = __importDefault(require("../models/goalkeeping"));
 const goals_1 = __importDefault(require("../models/goals"));
 const key_stats_1 = __importDefault(require("../models/key_stats"));
 const players_info_1 = __importDefault(require("../models/players_info"));
+const attacking_1 = __importDefault(require("../models/attacking"));
+const defending_1 = __importDefault(require("../models/defending"));
 class UefaRepository {
     getGoalsScored(clubName) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -45,7 +47,6 @@ class UefaRepository {
                 ],
                 where: { club: clubName },
             });
-            console.log(goals);
             return goals[0].dataValues.total_goals_conceded;
         });
     }
@@ -92,7 +93,6 @@ class UefaRepository {
                 attributes: ["first_name", "last_name"],
                 where: { player_id: player_id.dataValues.player_id },
             });
-            console.log(player_name);
             return (player_name.dataValues.first_name + " " + player_name.dataValues.last_name);
         });
     }
@@ -130,6 +130,18 @@ class UefaRepository {
             return results[0];
         });
     }
+    getGoalsScoredInPosition(clubName, position) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const goals = yield goals_1.default.findOne({
+                attributes: ["goals"],
+                where: {
+                    club: clubName,
+                    position: position,
+                },
+            });
+            return goals.dataValues.goals;
+        });
+    }
     getClubStats(clubNames) {
         return __awaiter(this, void 0, void 0, function* () {
             let resultList = [];
@@ -139,6 +151,68 @@ class UefaRepository {
                 resultList.push(result);
             }
             return resultList;
+        });
+    }
+    getPlayerStatsByType(clubName, type) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const sequelize = db_1.DbConnector.getClient();
+            const player_res = yield players_info_1.default.findAll({
+                attributes: ["player_id", "first_name", "last_name", "club"],
+                where: { club: clubName },
+            });
+            let playerStats = player_res.map((player) => __awaiter(this, void 0, void 0, function* () {
+                const player_id = player.dataValues.player_id;
+                const player_name = player.dataValues.first_name + " " + player.dataValues.last_name;
+                const club = player.dataValues.club;
+                const attacking = yield attacking_1.default.findOne({
+                    attributes: ["assists", "corner_taken", "offsides", "dribbles"],
+                    where: { player_id: player_id },
+                });
+                const goals = yield goals_1.default.findOne({
+                    attributes: ["goals"],
+                    where: { player_id: player_id },
+                });
+                const defending = yield defending_1.default.findOne({
+                    attributes: [
+                        "balls_recoverd",
+                        "t_won",
+                        "t_lost",
+                        "clearance_attempted",
+                        "tackles",
+                    ],
+                    where: { player_id: player_id },
+                });
+                const goalkeeping = yield goalkeeping_1.default.findOne({
+                    attributes: ["conceded", "saved", "cleansheets", "punches_made"],
+                    where: { player_id: player_id },
+                });
+                return {
+                    name: player_name,
+                    type: type,
+                    club: club,
+                    attack: {
+                        goals_scored: 0,
+                        assists: (attacking === null || attacking === void 0 ? void 0 : attacking.dataValues.assists) || 0,
+                        corners: (attacking === null || attacking === void 0 ? void 0 : attacking.dataValues.corner_taken) || 0,
+                        offsides: (attacking === null || attacking === void 0 ? void 0 : attacking.dataValues.offsides) || 0,
+                        dribbles: (attacking === null || attacking === void 0 ? void 0 : attacking.dataValues.dribbles) || 0,
+                    },
+                    defence: {
+                        goals: (goals === null || goals === void 0 ? void 0 : goals.dataValues.goals) || 0,
+                        tackles_won: (defending === null || defending === void 0 ? void 0 : defending.dataValues.t_won) || 0,
+                        tackles_lost: (defending === null || defending === void 0 ? void 0 : defending.dataValues.t_lost) || 0,
+                        clearance_attempts: (defending === null || defending === void 0 ? void 0 : defending.dataValues.clearance_attempted) || 0,
+                        balls_recovered: (defending === null || defending === void 0 ? void 0 : defending.dataValues.balls_recoverd) || 0,
+                    },
+                    goalkeeping: {
+                        saved: (goalkeeping === null || goalkeeping === void 0 ? void 0 : goalkeeping.dataValues.saved) || 0,
+                        conceded: (goalkeeping === null || goalkeeping === void 0 ? void 0 : goalkeeping.dataValues.conceded) || 0,
+                        clean_sheets: (goalkeeping === null || goalkeeping === void 0 ? void 0 : goalkeeping.dataValues.cleansheets) || 0,
+                        punches: (goalkeeping === null || goalkeeping === void 0 ? void 0 : goalkeeping.dataValues.punches_made) || 0,
+                    },
+                };
+            }));
+            return Promise.all(playerStats);
         });
     }
 }

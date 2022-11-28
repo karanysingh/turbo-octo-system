@@ -26,7 +26,7 @@ router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
             clubNames = club_names.toString().split(",");
         }
         if (type && club_names && clubNames.length == 1) {
-            const result = yield uefaService.getPlayerStats(clubNames[0], type);
+            const result = yield uefaService.getPlayerStats(clubNames[0], type.toString());
             res.status(200).send(result);
         }
         else if (club_names && position) {
