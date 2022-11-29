@@ -46,3 +46,6 @@ Ringover Full Stack Assignment - Backend
 - input: clubnames and position
 <img width="709" alt="image" src="https://user-images.githubusercontent.com/56989043/204465199-1497f40f-5c87-4dda-81ee-6341d699d4e1.png">
 
+- input: playername
+<img width="709" alt="image" src="https://user-images.githubusercontent.com/56989043/204465434-995f8c78-a43b-488e-aa2d-3f61c25f56e4.png">
+
