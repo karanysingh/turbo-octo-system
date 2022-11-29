@@ -43,4 +43,6 @@ Ringover Full Stack Assignment - Backend
 - input: clubname and type
 <img width="705" alt="image" src="https://user-images.githubusercontent.com/56989043/204464890-b9811859-44a8-4746-8ca3-ad8e655be429.png">
 
-- input: club
+- input: clubnames and position
+<img width="709" alt="image" src="https://user-images.githubusercontent.com/56989043/204465199-1497f40f-5c87-4dda-81ee-6341d699d4e1.png">
+
