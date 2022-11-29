@@ -59,7 +59,10 @@ class UefaService {
     getGoalsScoredinPosition(clubNames, position) {
         return __awaiter(this, void 0, void 0, function* () {
             let goalsScored = clubNames.map((clubName) => __awaiter(this, void 0, void 0, function* () {
-                return yield uefaRepository.getGoalsScoredInPosition(clubName, position);
+                return {
+                    club_name: clubName,
+                    score: yield uefaRepository.getGoalsScoredInPosition(clubName, position),
+                };
             }));
             return Promise.all(goalsScored);
         });

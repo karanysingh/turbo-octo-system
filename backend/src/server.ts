@@ -1,29 +1,36 @@
 import express from "express"
-import {uefaController} from "./controller/uefaController"
+import cors from "cors";
+import { uefaController } from "./controller/uefaController";
 
 export class Server {
-    private readonly app = express()
-    private PORT: Number
+  private readonly app = express();
+  private PORT: Number;
 
-    constructor(port: Number) {
-        this.PORT = port
-        this.addGlobalMiddleware();
-        this.initiateRoutes();
-    }
+  constructor(port: Number) {
+    this.PORT = port;
+    this.addGlobalMiddleware();
+    this.initiateRoutes();
+  }
 
-    private addGlobalMiddleware() {
-        this.app.use(express.json())
-        this.app.use(express.urlencoded({ extended: true }))
-    }
+  private addGlobalMiddleware() {
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
+    this.app.options(
+      "*",
+      cors({ origin: "http://localhost:8080", optionsSuccessStatus: 200 })
+    );
+    this.app.use(
+      cors({ origin: "http://localhost:8080", optionsSuccessStatus: 200 })
+    );
+  }
 
-    private initiateRoutes() {
-        this.app.use("/api/v1/uefa", uefaController)
+  private initiateRoutes() {
+    this.app.use("/api/v1/uefa", uefaController);
+  }
 
-    }
-
-    public start() {
-        this.app.listen(this.PORT, () => {
-            console.log(`Server is running on port ${this.PORT}`)
-        })
-    }
+  public start() {
+    this.app.listen(this.PORT, () => {
+      console.log(`Server is running on port ${this.PORT}`);
+    });
+  }
 }

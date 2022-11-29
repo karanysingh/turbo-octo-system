@@ -97,9 +97,15 @@ export class UefaService {
   public async getGoalsScoredinPosition(
     clubNames: string[],
     position: string
-  ): Promise<number[]> {
+  ): Promise<{ club_name: string; score: number }[]> {
     let goalsScored = clubNames.map(async (clubName) => {
-      return await uefaRepository.getGoalsScoredInPosition(clubName, position);
+      return {
+        club_name: clubName,
+        score: await uefaRepository.getGoalsScoredInPosition(
+          clubName,
+          position
+        ),
+      };
     });
     return Promise.all(goalsScored);
   }
