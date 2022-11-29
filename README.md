@@ -49,4 +49,8 @@ Ringover Full Stack Assignment - Backend
 - input: playername
 <img width="716" alt="image" src="https://user-images.githubusercontent.com/56989043/204465619-94ce95c8-d66e-468f-97f1-f7d11fe0d87a.png">
 
+### DB
+<img width="505" alt="image" src="https://user-images.githubusercontent.com/56989043/204466154-1c73d509-8612-46e8-93b7-70fa1651b81f.png">
+
+<img width="612" alt="image" src="https://user-images.githubusercontent.com/56989043/204466243-30501a8d-0935-44b2-b4d4-a7a5cf925aef.png">
 
