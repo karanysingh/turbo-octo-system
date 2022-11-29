@@ -4,7 +4,8 @@ envConfig();
 import { Server } from "./server";
 import { DbConnector } from "./config/db";
 
-const server = new Server(8081);
+const PORT: number = parseInt(process.env.PORT) || 8081;
+const server = new Server(PORT);
 
 const dbClient = DbConnector.getClient();
 dbClient.authenticate().then(() => {

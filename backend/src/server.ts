@@ -17,10 +17,10 @@ export class Server {
     this.app.use(express.urlencoded({ extended: true }));
     this.app.options(
       "*",
-      cors({ origin: "http://localhost:8080", optionsSuccessStatus: 200 })
+      cors({ origin: process.env.ALLOWED_ORIGIN, optionsSuccessStatus: 200 })
     );
     this.app.use(
-      cors({ origin: "http://localhost:8080", optionsSuccessStatus: 200 })
+      cors({ origin: process.env.ALLOWED_ORIGIN, optionsSuccessStatus: 200 })
     );
   }
 

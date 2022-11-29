@@ -9,7 +9,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { player_names:playerNames, club_names, position, type } = req.query;
 
-    var clubNames: string[];
+    let clubNames: string[];
 
     if (club_names) {
         clubNames = club_names.toString().split(",");
